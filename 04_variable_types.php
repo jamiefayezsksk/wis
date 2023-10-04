@@ -12,7 +12,7 @@
     <h1>Variable Types</h1>
 
     <div class="container">
-        <h2>Integers</h2>
+        <h4>Integers</h4>
         <?php
         print "Integers <br>";
         $int_var = 12345;
@@ -23,7 +23,7 @@
     </div>
 
     <div class="container">
-        <h2>Doubles</h2>
+        <h4>Doubles</h4>
         <?php
         $many = 2.2888800;
         $many_2 = 2.2111200;
@@ -33,7 +33,7 @@
     </div>
 
     <div class="container">
-        <h2>Boolean</h2>
+        <h4>Boolean</h4>
         <?php
         if (TRUE)
             print("This will always print<br>");
@@ -43,7 +43,7 @@
     </div>
 
     <div class="container">
-        <h2>Other Types of Boolean</h2>
+        <h4>Other Types of Boolean</h4>
         <?php
         $true_num = 3 + 0.14159;
         $true_str = "Tried and true";
@@ -62,14 +62,14 @@
     </div>
 
     <div class="container">
-        <h2>Null</h2>
+        <h4>Null</h4>
         <?php
         $my_var = null;
         ?>
     </div>
 
     <div class="container">
-        <h2>Strings</h2>
+        <h4>Strings</h4>
         <?php
         $string_1 = "This is a string in double quotes";
         $string_2 = "This is a somewhat longer, singly quoted string";
@@ -85,7 +85,7 @@
     </div>
 
     <div class="container">
-        <h2>Here Document</h2>
+        <h4>Here Document</h4>
         <?php
         $channel = <<<_XML_
         <channel>
@@ -94,6 +94,7 @@
         <description>Choose what to eat tonight.</description>
         </channel>
         _XML_;
+        
         echo <<<END
         This uses the "here document" syntax to output
         multiple lines with variable interpolation. Note
@@ -106,7 +107,7 @@
     </div>
 
     <div class="container">
-        <h2>PHP Local Variables</h2>
+        <h4>PHP Local Variables</h4>
         <?php
         $x = 4;
 
@@ -123,7 +124,7 @@
     </div>
 
     <div class="container">
-        <h2>PHP Function Parameters</h2>
+        <h4>PHP Function Parameters</h4>
         <?php
         // multiply a value by 10 and return it to the caller
         function multiply($value)
@@ -137,7 +138,7 @@
     </div>
 
     <div class="container">
-        <h2>PHP Global Variables</h2>
+        <h4>PHP Global Variables</h4>
         <?php
         $somevar = 15;
         function addit()
@@ -152,7 +153,7 @@
     </div>
 
     <div class="container">
-        <h2>PHP Static Variables</h2>
+        <h4>PHP Static Variables</h4>
         <?php
         function keep_track()
         {
