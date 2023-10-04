@@ -12,7 +12,7 @@
     $a = 42;
     $b = 20;
 
-    echo "Operator Types<br/><br/>";
+    echo "<h2>Operator Types<br/></h2>";
 
     $c = $a + $b;
     echo "Addition Operation Result: $c <br/><br/>";
