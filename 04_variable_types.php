@@ -94,7 +94,7 @@
         <description>Choose what to eat tonight.</description>
         </channel>
         _XML_;
-        
+
         echo <<<END
         This uses the "here document" syntax to output
         multiple lines with variable interpolation. Note
