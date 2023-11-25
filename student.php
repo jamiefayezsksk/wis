@@ -39,7 +39,7 @@
             } else {
                 echo "Error deleting record: " . $conn->error;
             }
-        } else {
+        } elseif (isset($_POST['add_data'])) {
             // Handle add logic
             $firstName = $_POST['firstName'];
             $lastName = $_POST['lastName'];
@@ -104,7 +104,7 @@
         <input type="email" name="email" required>
         <label for="phone">Contact Number:</label>
         <input type="tel" name="phone" required>
-        <input type="submit" value="Add Data">
+        <input type="submit" name="add_data" value="Add Data">
     </form>';
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
