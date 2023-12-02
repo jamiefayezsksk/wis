@@ -1,128 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Enrollment Records</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <title>EnrollmentRecord</title>
 </head>
-
 <body>
-    <?php
+    <?php // Check if the query was successful
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "StudentRecord";
+    $dbname = "studentrecord";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Status:  Connection failed: " . $conn->connect_error);
     }
+    echo "Server Status: Connected successfully";
+    ?>
+    <hr>
+    <h1>Enroll</h1>
+    <table style="width:40%">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <tr><td><label for="fname">Select Student:</label></td>
+            <td>
+            <select id="student" name="student">
+            <?php
+                echo "<br><hr>";
+                // Example query
+                $sql = "SELECT * FROM student";
+                $result = $conn->query($sql);
 
-    // Check if form is submitted for adding or updating data
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['delete'])) {
-            // Handle delete logic
-            $delete_id = $_POST['delete_id'];
-            $delete_query = "DELETE FROM Enrollment WHERE EnrollmentID = $delete_id";
-            if ($conn->query($delete_query) === TRUE) {
-                echo "Record deleted successfully.";
-            } else {
-                echo "Error deleting record: " . $conn->error;
-            }
-        } elseif (isset($_POST['edit'])) {
-            // Handle edit logic
-            $edit_id = $_POST['edit_id'];
-            $edit_query = "SELECT * FROM Enrollment WHERE EnrollmentID = $edit_id";
-            $edit_result = $conn->query($edit_query);
-
-            if ($edit_result && $edit_result->num_rows > 0) {
-                $edit_row = $edit_result->fetch_assoc();
-                $edit_studentID = $edit_row['StudentID'];
-                $edit_courseID = $edit_row['CourseID'];
-                $edit_enrollmentDate = $edit_row['EnrollmentDate'];
-                $edit_grade = $edit_row['Grade'];
-            }
-        } else {
-            // Handle add logic
-            $studentID = $_POST['studentID'];
-            $courseID = $_POST['courseID'];
-            $enrollmentDate = $_POST['enrollmentDate'];
-            $grade = $_POST['grade'];
-
-            if (!empty($_POST['edit_id'])) {
-                // Update existing record
-                $edit_id = $_POST['edit_id'];
-                $update_query = "UPDATE Enrollment SET StudentID = $studentID, CourseID = $courseID, EnrollmentDate = '$enrollmentDate', Grade = '$grade' WHERE EnrollmentID = $edit_id";
-                if ($conn->query($update_query) === TRUE) {
-                    echo "Record updated successfully.";
+                // Check if the query was successful
+                if ($result) {
+                    // Process the results
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value=" . $row["StudentID"] . ">".$row["FirstName"]."</option>";
+                    }
                 } else {
-                    echo "Error updating record: " . $conn->error;
-                }
-            } else {
-                // Insert new record
-                $insert_query = "INSERT INTO Enrollment (StudentID, CourseID, EnrollmentDate, Grade) VALUES ($studentID, $courseID, '$enrollmentDate', '$grade')";
-                if ($conn->query($insert_query) === TRUE) {
-                    echo "Data added successfully.";
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }?>
+            </select>
+            </td></tr>
+            <tr><td><label for="fname">Select Course:</label></td>
+            <td>
+            <select id="course" name="course">
+            <?php
+                echo "<br><hr>";
+                // Example query
+                $sql = "SELECT * FROM course";
+                $result = $conn->query($sql);
+
+                // Check if the query was successful
+                if ($result) {
+                    // Process the results
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value=" . $row["CourseID"] . ">".$row["CourseName"]."</option>";
+                    }
                 } else {
-                    echo "Error: " . $insert_query . "<br>" . $conn->error;
-                }
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }?>
+            </select>
+            </td></tr>
+            <tr><td><label for="fname">Enrollment Date:</label></td>
+            <td><input type="date" id="datepicker" name="selectedDate"></td></tr>
+            <tr><td><label for="fname">Grade:</label></td>
+            <td><input type="number" id="integerInput" name="grade" required></td></tr>      
+            <tr><td></td><td><input type="submit" value="submit" name="submit"></td></tr>
+        </form>
+    </table>
+    
+    <?php 
+
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        try{
+            $student = $_POST['student'];
+            $course = $_POST['course'];
+            $enrolldate = $_POST['selectedDate'];
+            $grade = (int)$_POST['grade'];
+            $studentsql = "INSERT INTO enrollment (StudentID,CourseID,EnrollmentDate,Grade) 
+                                    VALUES(
+                                    '$student',
+                                    '$course',
+                                    '$enrolldate',
+                                    '$grade')";
+            //$studentrecord = $conn->exec($studentsql);
+            //echo  gettype($studenfname);	
+
+            if (mysqli_query($conn, $studentsql)) {
+                echo "New record created successfully";
+            } else {
+                echo "<br>Error: " . $studentsql . "<br>" . mysqli_error($conn);
             }
+        }catch(PDOException $e) {
+            echo $studentrecord . "<br>" . $e->getMessage();
         }
-    }
-
-    // Fetch data
-    $sql = "SELECT * FROM Enrollment";
-    $result = $conn->query($sql);
-
-    // Check if the query was successful
-    if ($result) {
-        echo '<table border="1">';
-        echo '<tr><th>Enrollment ID</th>
+        
+        
+    }?>
+    <h1>Enrollment Records</h1>
+    <table style="width:100%">
+    <tr>
+        <th>Enrollment ID</th>
         <th>Student ID</th>
         <th>Course ID</th>
         <th>Enrollment Date</th>
         <th>Grade</th>
-        <th>Edit</th>
-        <th>Delete</th></tr>';
+    </tr>
+    <?php
+    echo "<br><hr>";
+    // Example query
+    $sql = "SELECT * FROM enrollment";
+    $result = $conn->query($sql);
+
+    // Check if the query was successful
+    if ($result) {
         // Process the results
         while ($row = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo '<td>' . $row['EnrollmentID'] . '</td>';
-            echo '<td>' . $row['StudentID'] . '</td>';
-            echo '<td>' . $row['CourseID'] . '</td>';
-            echo '<td>' . $row['EnrollmentDate'] . '</td>';
-            echo '<td>' . $row['Grade'] . '</td>';
-            echo '<td><form method="post" action=""><input type="hidden" name="edit_id" value="' . $row['EnrollmentID'] . '"><input type="submit" name="edit" value="Edit"></form></td>';
-            echo '<td><form method="post" action=""><input type="hidden" name="delete_id" value="' . $row['EnrollmentID'] . '"><input type="submit" name="delete" value="Delete"></form></td>';
-            echo '</tr>';
+            echo "<tr><td>" . $row["EnrollmentID"] . "</td>"
+            . "<td>" . $row["StudentID"]. "</td>"
+            . "<td>" . $row["CourseID"]. "</td>"
+            . "<td>" . $row["EnrollmentDate"]. "</td>"
+            . "<td>" . $row["Grade"]. "</td>";
         }
-        echo '</table>';
-
-        // Add data form
-        echo '<form method="post" action="">
-        <label for="studentID">Student ID:</label>
-        <input type="text" name="studentID" value="' . (isset($edit_studentID) ? $edit_studentID : '') . '" required>
-        <label for="courseID">Course ID:</label>
-        <input type="text" name="courseID" value="' . (isset($edit_courseID) ? $edit_courseID : '') . '" required>
-        <label for="enrollmentDate">Enrollment Date:</label>
-        <input type="date" name="enrollmentDate" value="' . (isset($edit_enrollmentDate) ? $edit_enrollmentDate : '') . '" required>
-        <label for="grade">Grade:</label>
-        <input type="text" name="grade" value="' . (isset($edit_grade) ? $edit_grade : '') . '" required>
-        <input type="hidden" name="edit_id" value="' . (isset($edit_id) ? $edit_id : '') . '">
-        <input type="submit" value="' . (isset($edit_id) ? 'Update' : 'Add Data') . '">
-    </form>';
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    // Close connection
-    $conn->close();
-    ?>
+    }?>
+    </table><hr>
 </body>
-
 </html>
+

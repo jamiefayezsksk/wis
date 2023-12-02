@@ -1,113 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Records</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <title>InstructorRecord</title>
 </head>
-
 <body>
-    <?php
+    <?php // Check if the query was successful
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "StudentRecord";
+    $dbname = "studentrecord";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Status:  Connection failed: " . $conn->connect_error);
     }
+    echo "Server Status: Connected successfully";
+    ?>
+    <hr>
+    <h1>Add Instructor Record</h1>
+    <table style="width:40%">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <tr><td><label for="fname">First name:</label></td>
+            <td><input type="text" name="insfname" id="insfname" value=""></td></tr>
+            <tr><td><label for="fname">Last name:</label></td>
+            <td><input type="text" name="inslname" id="inslname" value=""></td></tr>
+            <tr><td><label for="fname">Email:</label></td>
+            <td><input type="text" name="insemail" id="insemail" value=""></td></tr>
+            <tr><td><label for="fname">Phone:</label></td>
+            <td><input type="text" name="insphone" id="insphone" value=""></td></tr> 
+            <tr><td></td><td><input type="submit" value="submit" name="submit"></td></tr>
+        </form>
+    </table>
+    <?php 
 
-    // Check if form is submitted for adding data
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['edit'])) {
-            // Handle edit logic
-            $edit_id = $_POST['edit_id'];
-            // Redirect to edit page or perform edit action
-            // Example: header("Location: edit_instructor.php?id=$edit_id");
-        } elseif (isset($_POST['delete'])) {
-            // Handle delete logic
-            $delete_id = $_POST['delete_id'];
-            $delete_query = "DELETE FROM Instructor WHERE InstructorID = $delete_id";
-            if ($conn->query($delete_query) === TRUE) {
-                echo "Record deleted successfully.";
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        try{
+            $studenfname = $_POST['insfname'];
+            $studentlname = $_POST['inslname'];
+            $studentemail = $_POST['insemail'];
+            $studentphone = (int)$_POST['insphone'];
+            $studentsql = "INSERT INTO instructor (FirstName,LastName,Email,Phone) 
+                                    VALUES(
+                                    '$studenfname',
+                                    '$studentlname',
+                                    '$studentemail',
+                                    $studentphone)";
+            //$studentrecord = $conn->exec($studentsql);
+            //echo  gettype($studenfname);	
+
+            if (mysqli_query($conn, $studentsql)) {
+                echo "New record created successfully";
             } else {
-                echo "Error deleting record: " . $conn->error;
+                echo "<br>Error: " . $studentsql . "<br>" . mysqli_error($conn);
             }
-        } else {
-            // Handle add logic
-            $firstName = $_POST['firstName'];
-            $lastName = $_POST['lastName'];
-            $email = $_POST['email'];
-            $phone = $_POST['phone'];
-
-            // Use prepared statement to prevent SQL injection
-            $stmt = $conn->prepare("INSERT INTO Instructor (FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $firstName, $lastName, $email, $phone);
-
-            if ($stmt->execute()) {
-                echo "Data added successfully.";
-            } else {
-                echo "Error: " . $stmt->error;
-            }
-
-            // Close statement
-            $stmt->close();
+        }catch(PDOException $e) {
+            echo $studentrecord . "<br>" . $e->getMessage();
         }
-    }
-
-    // Fetch data
-    $sql = "SELECT * FROM Instructor";
-    $result = $conn->query($sql);
-
-    // Check if the query was successful
-    if ($result) {
-        echo '<table border="1">';
-        echo '<tr><th>Instructor ID</th>
+        
+        
+    }?>
+    <h1>Instructor Records</h1>
+    <table style="width:100%">
+    <tr>
+        <th>Instructor ID</th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
         <th>Phone</th>
-        <th>Edit</th>
-        <th>Delete</th></tr>';
+    </tr>
+    <?php
+    echo "<br><hr>";
+    // Example query
+    $sql = "SELECT * FROM instructor";
+    $result = $conn->query($sql);
+
+    // Check if the query was successful
+    if ($result) {
         // Process the results
         while ($row = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo '<td>' . $row['InstructorID'] . '</td>';
-            echo '<td>' . $row['FirstName'] . '</td>';
-            echo '<td>' . $row['LastName'] . '</td>';
-            echo '<td>' . $row['Email'] . '</td>';
-            echo '<td>' . $row['Phone'] . '</td>';
-            echo '<td><form method="post" action=""><input type="hidden" name="edit_id" value="' . $row['InstructorID'] . '"><input type="submit" name="edit" value="Edit"></form></td>';
-            echo '<td><form method="post" action=""><input type="hidden" name="delete_id" value="' . $row['InstructorID'] . '"><input type="submit" name="delete" value="Delete"></form></td>';
-            echo '</tr>';
+            echo "<tr><td>" . $row["InstructorID"] . "</td>"
+            . "<td>" . $row["FirstName"]. "</td>"
+            . "<td>" . $row["LastName"]. "</td>"
+            . "<td>" . $row["Email"]. "</td>"
+            . "<td>" . $row["Phone"]. "</td></tr>";
         }
-        echo '</table>';
-
-        // Add data form
-        echo '<form method="post" action="">
-        <label for="firstName">First Name:</label>
-        <input type="text" name="firstName" required>
-        <label for="lastName">Last Name:</label>
-        <input type="text" name="lastName" required>
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <label for="phone">Phone:</label>
-        <input type="tel" name="phone" required>
-        <input type="submit" value="Add Data">
-    </form>';
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    // Close connection
-    $conn->close();
-    ?>
+    }?>
+    </table><hr>
 </body>
-
 </html>
+

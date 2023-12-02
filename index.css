@@ -1,0 +1,76 @@
+body{
+    background-color: rgb(253, 253, 253);
+    font-family: 'Courier New', Courier, monospace;
+    color: black;
+}
+
+nav a{
+    background-color: rgb(104, 78, 78);
+    padding: 10px 30px;
+    margin: 0 5px;
+    color: aliceblue;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover{
+    background-color: rgb(93, 82, 102);
+    padding: 15px 35px;
+    color: white;
+}
+
+.files a{
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    font-weight: normal;
+    display: inline-flex;
+}
+
+.files a:hover{
+    background-color: white;
+    color: black;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td:last-child {
+    text-align: center;
+}
+
+form.inline {
+    display: inline;
+}
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button.edit {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+button.delete {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
