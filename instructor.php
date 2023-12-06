@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>InstructorRecord</title>
 </head>
 <body>
+<nav>
+    <ul class="navigation-bar">
+        <li><a href="student.php">StudentRecord</a></li>
+        <li><a href="courses.php">Course</a></li>
+        <li><a href="instructor.php">Instructor</a></li>
+        <li><a href="enrollment.php">Enrollment</a></li>
+    </ul>
+    </nav>
     <div class="status">
         <?php // Check if the query was successful
         $servername = "localhost";

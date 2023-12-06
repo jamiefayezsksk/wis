@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
     <title>StudentRecord</title>
 </head>
 <body>
+    <ul class="navigation-bar">
+        <li><a href="student.php">StudentRecord</a></li>
+        <li><a href="courses.php">Course</a></li>
+        <li><a href="instructor.php">Instructor</a></li>
+        <li><a href="enrollment.php">Enrollment</a></li>
+    </ul>
     <div class="status">
         <?php // Check if the query was successful
         $servername = "localhost";
@@ -170,7 +176,7 @@
             // Display input fields with fetched student information
             ?>
             <table style="width:40%">
-            <form method="POST" action="student.php">
+            <form method="POST" action="Student_Record.php">
             <input type="hidden" name="estudent_id" value="<?php echo $editstudent['StudentID']; ?>">
             <tr><td>First Name:</td>
              <td><input type="text" name="efirstname" value="<?php echo $editstudent['FirstName']; ?>"></td></tr>
@@ -213,4 +219,3 @@
     
 </body>
 </html>
-
