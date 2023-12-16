@@ -56,7 +56,7 @@
         }
 
 
-        $sql = "CREATE DATABASE IF NOT EXISTS studentrecord";
+        $sql = "CREATE DATABASE IF NOT EXISTS jaime";
         if ($conn->query($sql) === TRUE) {
             echo "Database created successfully<br>";
         } else {
